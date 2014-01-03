@@ -1,0 +1,10 @@
+# URL Resolver 0.1
+# URL Resolver was created to check where short links go including the path along the way
+
+Goo="Google.com"
+UserAgentString="Mozilla/4.0" 
+URL=${1:-$Goo} # defaults to google
+User=${2:-$UserAgentString} # defaults to Mozilla 4.0
+
+(echo $URL && curl -LIs "$URL" -A "$User"| grep '^Location' | cut -d' ' -f2) | cat -n
+
