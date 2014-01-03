@@ -1,6 +1,13 @@
 # URL Resolver 0.1
 # URL Resolver was created to check where short links go including the path along the way
 
+if [ "$1" == "-h" ]; then
+  echo "Usage: `basename $0`"
+  echo "First input is the website"
+  echo "Second input is the User Agent String"
+  exit 0
+fi
+
 Goo="Google.com"
 UserAgentString="Mozilla/4.0" 
 URL=${1:-$Goo} # defaults to google
