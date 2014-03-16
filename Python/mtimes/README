@@ -1,0 +1,55 @@
+mtimes_save and mtimes_restore python scripts
+=============================================
+
+Usage:  mtimes_save.py
+
+* Creates a python style dictionary that maps each file's content SHA1 hash value to that file's modified datetime stamp.
+* Writes the dictionary to a python pickle file named:  .mtimes.pickle.
+* Ignores Directories with the "." prefix (e.g. "\.git" or "\.svn").  Note, it does not ignore Files with the "." prefix (e.g. ".gitignore")
+* If duplicate files are found, the Oldest mtime timestamp is saved.
+
+1.  cd to the top most folder in the directory tree you want to preserve file timestamps for.
+2.  run:   python mtimes_save.py
+
+Typical Git workflow to save file timestamps
+$ python mtimes_save.py
+$ git add -v .
+$ git commit -m "..."
+$ git push
+
+-------------------------
+Usage:  mtimes_restore.py
+
+* Reads the dictionary pickle file created by mtimes_save.py.
+* Ignores directories with the "." prefix (e.g. "\.git")
+* Probably crashes if the .mtimes.pickle file is not found.  sorry - I haven't learned python error handling yet!
+
+1.  cd to the top most folder in the directory tree you want to restore file timestamps to.
+2.  run:   python mtimes_restore.py
+
+Typical Get workflow to restore file timestamps
+$ git clone ....
+  # Note:  This only works if you saved an .mtimes.pickle file in the repository
+$ python mtimes_restore.py
+
+-------------------------
+Usage:  hash_files.py
+
+* Lists the SHA1 hash and mtime values for each file
+* Identifies each duplicate file with a "+".  When the output listing is sorted, it is easy to spot the files with duplicates.
+
+1.  cd to the top most folder in the directory tree you want to restore file timestamps to.
+2.  run:   python hash_files.py | sort
+
+Typical Get workflow to restore file timestamps
+$ python hash_files.py | sort
+
+
+--------------
+Comments:  The SHA1 hash of file content used for uniquely identifying files is the same used by git.
+
+Known Issues:  The Python print() and os.path.getmtime() functions do not like file paths that use international characters like hangul and kanja.
+This issue is bypassed by not printing file names in the mtimes save and restore scripts.  However, the hash_files.py script prints file paths for meaningful output, so it probably will crash if your directory contains hangul or kanja folder or file names.
+
+-----------------
+License = n/a:  Submitted to the public domain: 03/15/14  //AJ
