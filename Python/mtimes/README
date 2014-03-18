@@ -1,6 +1,31 @@
 mtimes_save and mtimes_restore python scripts
 =============================================
+Updated 03/17/2014
 
+Overview
+--------
+This project contains the following Python(3.3) scripts:
+mtimes_save.py     = saves files modified timestamps
+mtimes_restore.py  = restores files modified timestamps
+hash_files.py      = lists files SHA1 hash and timestamps values
+
+Purpose
+-------
+Presevers the date and time that files were modified allowing directory listings to be meaningfully sorted by the date and time files were last edited.  When a repository of files is cloned, the files in the new repository have the current system date time that they were cloned.  Using the mtimes_save.py script to save the files' mtimes in a python pickle formatted data dictionary file just before they are added and commited to the repository.  This provides the ability for running the mtimes_restore.py script to restore these timestamps after cloning or exporting files from the repository.  
+
+The purpose for these scripts is to preserve the timestamps.  When duplicate files are encountered, only the OLDEST timestamp from the duplicate files is saved - because the oldest is closer to the original file's modification datetime.  When duplicate files are restored, they All get the OLDEST timestamp.  File uniqueness is determined by calculating the SHA1 hash value for its contents.  This "OLDEST" for duplicates may be mis-leading for some duplicate content files that may be intentionally distinct by name or path.  For example, if you want 2 README files with identical content to have different timestamps because they are in 2 separate folders - then you would need to execute the mtimes_save.py script inside the local folder for each README and conversely run the mtimes_restore.py script inside the same local folder to restore the README's unique timestamp.
+
+The scripts can easily be modified to be used as git hook scripts.  However, the scripts require reading each file's content to generate an SHA1 hash.  For large repositories, it is better to run the scripts manually when appropriate (e.g. for tagged versions).
+
+The hash_files.py script simply lists each SHA1, timestamp, and file path for each file.  Duplicate files are identified by a "+" character after the displayed SHA1 value.  This makes it easy to identify duplicate files by piping the script to sort.  The sorted listing will show the sorted SHA1 values, oldest files first.
+
+Comments
+--------
+I personally find these scripts usefull when working with large quantities of documents, photos, and CNC code files where the timestamps are convenient for sifting through the files using common file explorer tools.  Version control systems like Subversion and Git, do not preserve file timestamps when files are stored or retrieved from them.  For mutable files, timestamps typically are not as important as the "latest version".  I wrote these scripts to save and restore file timestamps for typically immutable files - whose timestamps are valuable attriubutes over a long file storage lifecycle.
+
+//AJ
+
+======================
 Usage:  mtimes_save.py
 
 * Creates a python style dictionary that maps each file's content SHA1 hash value to that file's modified datetime stamp.
@@ -53,3 +78,4 @@ This issue is bypassed by not printing file names in the mtimes save and restore
 
 -----------------
 License = n/a:  Submitted to the public domain: 03/15/14  //AJ
+Updated Mar 17, 2014
