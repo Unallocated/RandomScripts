@@ -15,7 +15,6 @@ import tempfile
 import io
 import hashlib
 import datetime
-import pickle
  
 def system(*args, **kwargs):
     kwargs.setdefault('stdout', subprocess.PIPE)
